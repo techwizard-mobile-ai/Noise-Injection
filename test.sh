@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 python dart/examples/test_bc.py --envname Hopper-v2 --t 500 --iters 5 10 15 20
 python dart/examples/test_dart.py --envname Hopper-v2 --t 500 --iters 5 10 15 20 --update 1 7
 python dart/examples/test_dagger.py --envname Hopper-v2 --t 500 --iters 5 10 15 20 --beta .5

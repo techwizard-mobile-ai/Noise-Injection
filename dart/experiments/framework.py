@@ -39,7 +39,7 @@ class Test(object):
         self.params['d'] = self.env.action_space.shape[0]
 
         sess = tf.Session()
-        policy = load_policy.load_policy(self.params['filename'])
+        policy = load_policy(self.params['filename'])
         net_sup = Supervisor(policy, sess)
         init_cov = np.zeros((self.params['d'], self.params['d']))
         sup = GaussianSupervisor(net_sup, init_cov)
@@ -127,11 +127,10 @@ class Test(object):
             Evaluate on all metrics including 
             reward, loss, and simulated error of the supervisor
         """
-        results = {}
-        results['rewards'] = statistics.eval_rewards(self.env, self.lnr, self.params['t'], 1)
-        results['surr_losses'] = statistics.evaluate_lnr_cont(self.env, self.lnr, self.sup, self.params['t'], 1)
-        results['sup_losses'] = statistics.evaluate_sup_cont(self.env, self.lnr, self.sup, self.params['t'], 1)
-        results['sim_errs'] = statistics.evaluate_sim_err_cont(self.env, self.sup, self.params['t'], 1)
+        results = {'rewards': statistics.eval_rewards(self.env, self.lnr, self.params['t'], 1),
+                   'surr_losses': statistics.evaluate_lnr_cont(self.env, self.lnr, self.sup, self.params['t'], 1),
+                   'sup_losses': statistics.evaluate_sup_cont(self.env, self.lnr, self.sup, self.params['t'], 1),
+                   'sim_errs': statistics.evaluate_sim_err_cont(self.env, self.sup, self.params['t'], 1)}
         return results
 
 
