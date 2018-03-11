@@ -7,3 +7,6 @@ build/
 
 # Ignore virtual environment
 venv/
+
+# Ignore results folder
+results/
