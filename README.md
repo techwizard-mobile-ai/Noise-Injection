@@ -3,16 +3,28 @@ Dart is a fork of Noise Injection for Imitation Learning published here:
 
 https://github.com/BerkeleyAutomation/DART
 
-## Quick Install
 
-```bash
-    git clone 
-    cd NoiseInjection
-    python setup.py install --user
-```
+## Installation and requirements
+1. Install MuJoCo Pro 1.50 from the download page on the [MuJoCo website](http://www.mujoco.org/).
+2. Install a license key for MuJoCo, required by `dart` at runtime. By default, `dart` and `gym` look for the MuJoCo license key file at
+   `~/.mujoco/mjkey.txt`.
+3. Install mujoco-py
+    ```bash
+        git clone https://github.com/openai/mujoco-py.git
+        cd mujoco-py
+        python setup.py install --user
+    ```
+4. Install Dart
+
+    ```bash
+        cd ..
+        git clone https://github.com/pedronahum/NoiseInjection.git
+        cd NoiseInjection
+        python setup.py install --user
+    ```
 
 
-## Original Readme.txt from BerkeleyAutomation repository
+## Original Readme.md from BerkeleyAutomation repository: 
 # DART: Noise Injection for Imitation Learning
 
 
