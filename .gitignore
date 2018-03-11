@@ -10,3 +10,9 @@ venv/
 
 # Ignore results folder
 results/
+
+# Ignore distribution folder
+dist/
+
+# Ignore mujoco outputs
+MUJOCO_LOG.TXT
