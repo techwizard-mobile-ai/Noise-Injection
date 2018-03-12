@@ -26,4 +26,4 @@ dart/experiments/tools/expert/__init__.py
 dart/experiments/tools/expert/load_policy.py
 dart/experiments/tools/expert/run_expert.py
 dart/experiments/tools/expert/tf_util.py
-dart/experts/__init__.py
+experts/__init__.py

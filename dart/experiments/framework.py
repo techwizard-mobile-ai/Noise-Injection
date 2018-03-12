@@ -33,13 +33,14 @@ class Test(object):
         """
             Preprocess hyperparameters and initialize learner and supervisor
         """
+
         self.params['filename'] = './experts/' + self.params['envname'] + '.pkl'
         self.env = gym.envs.make(self.params['envname'])
 
         self.params['d'] = self.env.action_space.shape[0]
 
         sess = tf.Session()
-        policy = load_policy(self.params['filename'])
+        policy = load_policy.load_policy(self.params['filename'])
         net_sup = Supervisor(policy, sess)
         init_cov = np.zeros((self.params['d'], self.params['d']))
         sup = GaussianSupervisor(net_sup, init_cov)

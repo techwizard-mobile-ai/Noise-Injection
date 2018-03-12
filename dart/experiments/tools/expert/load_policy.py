@@ -2,7 +2,10 @@
 Author: John Schulman
 """
 from .tf_util import lrelu, function
-import pickle, tensorflow as tf, numpy as np
+import pickle
+import tensorflow as tf
+import numpy as np
+
 def load_policy(filename):
     with open(filename, 'rb') as f:
         data = pickle.loads(f.read())

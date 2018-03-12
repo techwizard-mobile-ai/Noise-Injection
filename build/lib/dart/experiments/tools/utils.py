@@ -97,7 +97,8 @@ def filter_data(params, states, i_actions):
     """
     T = params['t']
     k = np.random.randint(0, T/50)
-    states, i_actions = states[k::T/50], i_actions[k::T/50]
+    upper_limit = int(T/50)
+    states, i_actions = states[k::upper_limit], i_actions[k::upper_limit]
     return states, i_actions
 
 
