@@ -12,9 +12,11 @@ Author of this script and included expert policies: Jonathan Ho (hoj@openai.com)
 import pickle
 import tensorflow as tf
 import numpy as np
-import tf_util
+from .tf_util import *
+#import .tf_util
 import gym
-import load_policy
+from .load_policy import *
+#import load_policy
 
 def main():
     import argparse

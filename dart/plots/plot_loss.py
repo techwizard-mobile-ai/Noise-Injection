@@ -3,7 +3,7 @@ import os
 import argparse
 import pandas as pd
 import scipy.stats
-from .tools import statistics, utils
+from dart.experiments.tools import statistics, utils
 import matplotlib.pyplot as plt
 import itertools
 marker = itertools.cycle((',', '+', '.', 'o', '*', 's')) 
@@ -22,7 +22,6 @@ def main():
     ap.add_argument('--iters', required=True, type=int, nargs='+')
     ap.add_argument('--update', required=True, nargs='+', type=int)
     ap.add_argument('--save', action='store_true', default=False)
-    ap.add_argument('--normalize', action='store_true', default=False)
     
     params = vars(ap.parse_args())
     params['arch'] = [64, 64]
@@ -30,9 +29,7 @@ def main():
     params['epochs'] = 50
 
     should_save = params['save']
-    should_normalize = params['normalize']
     del params['save']
-    del params['normalize']
 
     plt.style.use('ggplot')
 
@@ -40,107 +37,94 @@ def main():
     ptype = 'surr_loss'
     
 
-    # Best supervisor reward
+    # Behavior Cloning loss on sup distr
     title = 'test_bc'
-    ptype = 'sup_reward'
-    params_bc = params.copy()
-    del params_bc['update']     # Updates are used in behavior cloning
-    means, sems = utils.extract_data(params_bc, iters, title, sub_dir, ptype)
-    plt.plot(iters, means, label='Supervisor', color='green')
-
-    sup_means, sup_sems = means, sems
-    def normalize(means, sems):
-        if should_normalize:
-            means = means / sup_means
-            sems = sems / sup_means
-            return means, sems
-        else:
-            return means, sems
-
-
-
-    # Noisy supervisor reward using DART
-    title = 'test_dart'
-    ptype = 'sup_reward'
-    params_dart = params.copy()
-    means, sems = utils.extract_data(params_dart, iters, title, sub_dir, ptype)
-    means, sems = normalize(means, sems)
-    plt.plot(iters, means, label='DART Noisy Supervisor', color='green', linestyle='--')
-
-    # BC
-    title = 'test_bc'
-    ptype = 'reward'
+    ptype = 'sup_loss'
     params_bc = params.copy()
     del params_bc['update']     # Updates are used in behavior cloning
     c = next(color)
     means, sems = utils.extract_data(params_bc, iters, title, sub_dir, ptype)
-    means, sems = normalize(means, sems)
+    plt.plot(iters, means, color=c, linestyle='--')
+
+    ptype = 'surr_loss'
+    means, sems = utils.extract_data(params_bc, iters, title, sub_dir, ptype)
     plt.plot(iters, means, label='Behavior Cloning', color=c)
     plt.fill_between(iters, (means - sems), (means + sems), alpha=.3, color=c)
 
 
     # DAgger
     title = 'test_dagger'
-    ptype = 'reward'
+    ptype = 'sup_loss'
     params_dagger = params.copy()
+    params_dagger['beta'] = .5      # You may adjust the prior to whatever you chose.
     del params_dagger['update']
-    params_dagger['beta'] = .5
     c = next(color)
     means, sems = utils.extract_data(params_dagger, iters, title, sub_dir, ptype)
-    means, sems = normalize(means, sems)
+    plt.plot(iters, means, color=c, linestyle='--')
+
+    ptype = 'surr_loss'
+    means, sems = utils.extract_data(params_dagger, iters, title, sub_dir, ptype)
     plt.plot(iters, means, label='DAgger', color=c)
     plt.fill_between(iters, (means - sems), (means + sems), alpha=.3, color=c)
 
 
     # DAgger B
     title = 'test_dagger_b'
-    ptype = 'reward'
+    ptype = 'sup_loss'
     params_dagger_b = params.copy()
     params_dagger_b['beta'] = .5      # You may adjust the prior to whatever you chose.
     c = next(color)
     means, sems = utils.extract_data(params_dagger_b, iters, title, sub_dir, ptype)
-    means, sems = normalize(means, sems)
-    plt.plot(iters, means, color=c, label='DAgger-B')
+    plt.plot(iters, means, color=c, linestyle='--')
+
+    ptype = 'surr_loss'
+    means, sems = utils.extract_data(params_dagger_b, iters, title, sub_dir, ptype)
+    plt.plot(iters, means, label='DAgger-B', color=c)
     plt.fill_between(iters, (means - sems), (means + sems), alpha=.3, color=c)
 
 
     # Isotropic noise
     title = 'test_iso'
-    ptype = 'reward'
+    ptype = 'sup_loss'
     params_iso = params.copy()
     params_iso['scale'] = 1.0
     del params_iso['update']
     c = next(color)
     means, sems = utils.extract_data(params_iso, iters, title, sub_dir, ptype)
-    means, sems = normalize(means, sems)
-    plt.plot(iters, means, color=c, label='Isotropic')
+    plt.plot(iters, means, color=c, linestyle='--')
+
+    ptype = 'surr_loss'
+    means, sems = utils.extract_data(params_iso, iters, title, sub_dir, ptype)
+    plt.plot(iters, means, label='Isotropic Noise', color=c)
     plt.fill_between(iters, (means - sems), (means + sems), alpha=.3, color=c)
 
 
 
     # DART
     title = 'test_dart'
-    ptype = 'reward'
+    ptype = 'sup_loss'
     params_dart = params.copy()
     c = next(color)
     means, sems = utils.extract_data(params_dart, iters, title, sub_dir, ptype)
-    means, sems = normalize(means, sems)
+    plt.plot(iters, means, color=c, linestyle='--')
+    
+    ptype = 'surr_loss'
+    means, sems = utils.extract_data(params_dart, iters, title, sub_dir, ptype)
     plt.plot(iters, means, label='DART', color=c)
     plt.fill_between(iters, (means - sems), (means + sems), alpha=.3, color=c)
 
-    plt.title("Reward on " + str(params['envname']))
+
+    plt.title("Loss on " + str(params['envname']))
     plt.legend()
     plt.xticks(iters)
-    plt.legend()
-    if should_normalize:
-        plt.ylim(0, 1.05)
+    plt.legend(loc='upper right')
 
     save_path = 'images/'
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
     if should_save == True:
-        plt.savefig(save_path + str(params['envname']) + "_reward.pdf")
+        plt.savefig(save_path + str(params['envname']) + "_loss.pdf")
     else:
         plt.show()
 
