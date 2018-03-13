@@ -24,12 +24,10 @@ This repository has been tested with Python 3.5.4, Tensorflow 1.5.0 and Mujoco 1
         python setup.py install --user
     ```
 5. Run all the tests (wait a couple of hours)
-
     ```bash
        sh test.sh 
     ```
 6. Plot all the results
-
     ```bash
        sh plot.sh 
     ```
