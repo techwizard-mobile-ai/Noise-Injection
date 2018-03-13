@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 python dart/plots/plot_loss.py --env Hopper-v2 --t 500 --iters 5 10 15 20 --update 1 7 --save
 python dart/plots/plot_reward.py --env Hopper-v2 --t 500 --iters 5 10 15 20 --update 1 7 --save
 python dart/plots/plot_loss_rand.py --env Hopper-v2 --t 500 --iters 5 10 15 20 --update 1 7 --save
