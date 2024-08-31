@@ -1,7 +1,4 @@
-
-Dart is a fork of Noise Injection for Imitation Learning published here:
-
-https://github.com/BerkeleyAutomation/DART
+# Dart Noise Injection
 
 This repository has been tested with Python 3.5.4, Tensorflow 1.5.0 and Mujoco 1.50.1.41. 
 
